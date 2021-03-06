@@ -16,7 +16,7 @@
     </iframe>
     <script type="text/javascript">
         //let apiURL="http://localhost:8090/url";
-        let apiURL="http://blueexabyte.github.io/clipGenerator/url";
+        let apiURL="https://blueexabyte.github.io/clipGenerator/url";
         let strResponseHttpRequest = httpGetAsync(apiURL, function(responseText) {
             console.log("response", (responseText));
             document.getElementById("displayFrame").src = JSON.parse(responseText)['url']
