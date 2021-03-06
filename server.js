@@ -1,13 +1,23 @@
 const request = require("request");
 const async = require("async");
+var express = require('express');
+var app = express();
+var fs = require("fs");
+var http = require('http');
+const cors = require('cors');
 var accessToken = '';
+let clipURL = 'test'
+let sourcePre = 'https://clips.twitch.tv/embed?clip='
+let sourceSuff = '&parent=www.blueexabyte.github.io&parent=blueexabyte.github.io'
+let brodcasterID = '58115189';
 
+app.use(cors())
 
 function gameRequest(accessToken){
     setTimeout(() => {
     const gameOptions = {
         //'https://api.twitch.tv/helix/users?login=blueexabyte',
-        url: 'https://api.twitch.tv/helix/clips?broadcaster_id=58115189&first=100',
+        url: 'https://api.twitch.tv/helix/clips?broadcaster_id=' + brodcasterID + '&first=100',
         method: 'GET',
         headers:{
             'Client-ID': '4z8jrmlca65cyeio9vvrsc99xe5c70',
@@ -24,8 +34,17 @@ function gameRequest(accessToken){
             return console.log(err);
         }
         
-        console.log('Status: ${res.statusCode}');
-        console.log(JSON.parse(body));
+        //console.log("API Response: ")
+        //console.log(JSON.parse(body));
+        let apiResult = JSON.parse(body);
+        let clipsArray = [];
+        for (let i = 0; i < (apiResult['data'].length); i++) {
+            clipsArray.push(apiResult['data'][i]['id']);
+        }
+
+        clipURL = sourcePre + String(clipsArray[Math.floor(Math.random() * clipsArray.length)]) + sourceSuff;
+        console.log(clipURL);
+        //document.getElementById('displayFrame').src = clipURL;
     });
     
     };
@@ -53,10 +72,8 @@ request.post(options, (err,res,body)=>{
     
 });
 
-var http = require('http');
-var fs = require('fs');
-
 const PORT=8080; 
+const port=8090;
 
 fs.readFile('./index.html', function (err, html) {
 
@@ -68,3 +85,11 @@ fs.readFile('./index.html', function (err, html) {
         response.end();  
     }).listen(PORT);
 });
+
+app.get('/url',(req,res)=>{
+    res.json({ url: String(clipURL) })
+})
+
+app.listen(port, () => {
+    console.log(`Example app listening at http://localhost:${port}`)
+})

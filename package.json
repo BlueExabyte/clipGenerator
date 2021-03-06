@@ -5,8 +5,11 @@
   "main": "getGames.js",
   "dependencies": {
     "async": "^3.2.0",
+    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "jsdom": "^16.4.0",
+    "puppeteer": "^8.0.0",
     "request": "^2.88.2"
   },
   "devDependencies": {},
